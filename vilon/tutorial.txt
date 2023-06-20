@@ -92,7 +92,7 @@ go build -o cnc/cnc cnc/*.go
 cd cnc
 screen ./cnc
 
-Daca sunt probleme: petronel69#6969
+Daca sunt probleme: ktho
 
 DACA DATI UPDATE LA CNC:
 BAGATI ASTEA SI APASATI ENTER:

